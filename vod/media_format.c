@@ -70,57 +70,6 @@ media_format_finalize_track(
 			media_info->u.video.transfer_characteristics = hevc_parser_get_transfer_characteristics(
 				parser_ctx);
 		}
-		break;
-
-	case MEDIA_TYPE_VIDEO:
-		if ((parse_type & PARSE_FLAG_CODEC_TRANSFER_CHAR) == 0)
-		{
-			break;
-		}
-
-		if (media_info->codec_id != VOD_CODEC_ID_AVC && media_info->codec_id != VOD_CODEC_ID_HEVC)
-		{
-			break;
-		}
-
-		rc = avc_hevc_parser_init_ctx(
-			request_context,
-			&parser_ctx);
-		if (rc != VOD_OK)
-		{
-			return rc;
-		}
-
-		if (media_info->codec_id == VOD_CODEC_ID_AVC)
-		{
-			rc = avc_parser_parse_extra_data(
-				parser_ctx,
-				&media_info->extra_data,
-				NULL,
-				NULL);
-			if (rc != VOD_OK)
-			{
-				return rc;
-			}
-
-			media_info->u.video.transfer_characteristics = avc_parser_get_transfer_characteristics(
-				parser_ctx);
-		}
-		else
-		{
-			rc = hevc_parser_parse_extra_data(
-				parser_ctx,
-				&media_info->extra_data,
-				NULL,
-				NULL);
-			if (rc != VOD_OK)
-			{
-				return rc;
-			}
-
-			media_info->u.video.transfer_characteristics = hevc_parser_get_transfer_characteristics(
-				parser_ctx);
-		}
 	}
 
 	// get the codec name
